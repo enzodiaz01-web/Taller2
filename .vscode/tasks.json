@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar y ejecutar",
+            "type": "shell",
+            "command": "g++ Main.cpp SparseMatrix.cpp -o Main.exe && Main.exe",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}

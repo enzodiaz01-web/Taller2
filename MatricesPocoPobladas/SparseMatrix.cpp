@@ -17,17 +17,6 @@ SparseMatrix::~SparseMatrix() {
     }
 
 }
-// Obtener el valor en (x, y)
-int SparseMatrix::get(int xPos, int yPos) {
-    Nodo* current = start;
-    while (current != nullptr) {
-        if (current->x == xPos && current->y == yPos) {
-            return current->value;
-        }
-        current = current->next;
-    }
-    return 0;
-}
 // Insertar un dato en coordenadas (x, y)
 void SparseMatrix::add(int value, int xPos, int yPos) {
     if (value == 0) return;
@@ -36,7 +25,6 @@ void SparseMatrix::add(int value, int xPos, int yPos) {
         start = new Nodo(xPos, yPos, value);
         return;
     }
-
     Nodo* current = start;
     Nodo* prev = nullptr;
 
