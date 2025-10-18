@@ -28,6 +28,75 @@ int SparseMatrix::get(int xPos, int yPos) {
     }
     return 0;
 }
+// Insertar un dato en coordenadas (x, y)
+void SparseMatrix::add(int value, int xPos, int yPos) {
+    if (value == 0) return;
+
+    if (start == nullptr) {
+        start = new Nodo(xPos, yPos, value);
+        return;
+    }
+
+    Nodo* current = start;
+    Nodo* prev = nullptr;
+
+    while (current != nullptr) {
+        if (current->x == xPos && current->y == yPos) {
+            current->value = value;
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+
+    prev->next = new Nodo(xPos, yPos, value);
+}
+
+// Obtener el valor en (x, y)
+int SparseMatrix::get(int xPos, int yPos) {
+    Nodo* current = start;
+    while (current != nullptr) {
+        if (current->x == xPos && current->y == yPos) {
+            return current->value;
+        }
+        current = current->next;
+    }
+    return 0;
+}
+
+// Eliminar un valor en (x, y)
+void SparseMatrix::remove(int xPos, int yPos) {
+    if (start == nullptr) return;
+
+    Nodo* current = start;
+    Nodo* prev = nullptr;
+
+    while (current != nullptr) {
+        if (current->x == xPos && current->y == yPos) {
+            if (current == start)
+                start = current->next;
+            else
+                prev->next = current->next;
+            delete current;
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+}
+
+// Imprimir valores almacenados
+void SparseMatrix::printStoredValues() {
+    Nodo* current = start;
+    if (!current) {
+        cout << "(Matriz vacía)" << endl;
+        return;
+    }
+    while (current != nullptr) {
+        cout << "(" << current->x << ", " << current->y << ") --> " << current->value << endl;
+        current = current->next;
+    }
+}
 
 // Calcular densidad de la matriz
 int SparseMatrix::density() {
