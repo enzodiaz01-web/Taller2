@@ -4,7 +4,6 @@ struct Nodo {
     int y;
     int value;
     Nodo* next;
-
     Nodo(int posX, int posY, int val) {
         x = posX;
         y = posY;

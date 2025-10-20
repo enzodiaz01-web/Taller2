@@ -9,7 +9,7 @@ public:
 	int get(int xPos, int yPos);
 	void remove(int xPos, int yPos);
 	void printStoredValues();
-	int density();
+	double density();
 	SparseMatrix* multiply(SparseMatrix* second);
 	~SparseMatrix();
 	double densidad(int filas, int columnas);

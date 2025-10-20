@@ -87,11 +87,10 @@ void SparseMatrix::printStoredValues() {
 }
 
 // Calcular densidad de la matriz
-int SparseMatrix::density() {
-    if (start == nullptr) return 0;
+double SparseMatrix::density() {
+    if (start == nullptr) return 0.0;
 
-    int count = 0;
-    int maxX = 0, maxY = 0;
+    int count = 0, maxX = 0, maxY = 0;
 
     Nodo* current = start;
     while (current != nullptr) {
@@ -100,13 +99,10 @@ int SparseMatrix::density() {
         if (current->y > maxY) maxY = current->y;
         current = current->next;
     }
-
     int total = (maxX + 1) * (maxY + 1);
-    if (total == 0) return 0;
-
-    double dens = (double)count / total * 100.0;
-    cout << "Densidad: " << dens << "% (" << count << "/" << total << ")" << endl;
-    return (int)dens;
+    if (total == 0) return 0.0;
+    double dens = (double)count / total;
+    return (double) count/total;
 }
 
 // Multiplicar dos matrices poco pobladas
