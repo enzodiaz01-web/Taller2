@@ -1,8 +1,10 @@
 #pragma once
 #include "Nodo.h"
+#include <vector>
 class SparseMatrix {
 private:
-	Nodo* start;
+	std::vector<Nodo*> filas;
+	int numCols;
 public:
 	SparseMatrix();
 	void add(int value, int xPos, int yPos);

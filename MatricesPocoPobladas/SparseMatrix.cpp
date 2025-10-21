@@ -4,67 +4,79 @@ using namespace std;
 
 // Constructor
 SparseMatrix::SparseMatrix() {
-    start = nullptr;
+    numCols=0;
 }
 
 // Destructor
 SparseMatrix::~SparseMatrix() {
-    Nodo* aux = start;
-    while (aux != nullptr) {
-        Nodo* temp = aux;
-        aux = aux->next;
-        delete temp;
+    for(auto head : filas){
+        while (head) {
+            Nodo* temp = head;
+            head = head->next;
+            delete temp;
+        }
     }
-
 }
 // Insertar un dato en coordenadas (x, y)
-void SparseMatrix::add(int value, int xPos, int yPos) {
-    if (value == 0) return;
+void SparseMatrix::add(int valor, int fila, int col) {
+    if (valor == 0) return;
 
-    if (!start) {
-        start = new Nodo(xPos, yPos, value);
-        return;
+    if (fila>=filas.size()) {
+        filas.resize(fila+1,nullptr);
     }
-    Nodo* current = start;
+    if(col>=numCols){
+        numCols=col+1;
+    }
+
+
+    Nodo* &head=filas[fila];
+    Nodo* current = head;
     Nodo* prev = nullptr;
 
-    while (current != nullptr) {
-        if (current->x == xPos && current->y == yPos) {
-            current->value = value;
-            return;
-        }
+    while (current && current->col < col) {
         prev = current;
         current = current->next;
     }
 
-    prev->next = new Nodo(xPos, yPos, value);
+    if (current && current->col == col) {
+        current->valor = valor;
+        return;
+    }else{
+        Nodo* nuevo = new Nodo(col,valor);
+        nuevo->next = current;
+        if(prev){
+            prev->next=nuevo;
+
+        }else{
+            head = nuevo;
+        }
+    }
 }
 
 // Obtener el valor en (x, y)
-int SparseMatrix::get(int xPos, int yPos) {
-    Nodo* current = start;
-    while (current != nullptr) {
-        if (current->x == xPos && current->y == yPos) {
-            return current->value;
-        }
+int SparseMatrix::get(int fila, int col) {
+    if(fila >=filas.size()) return 0;
+    Nodo* current = filas[fila];
+    while (current) {
+        if (current->col == col) return current->valor;
         current = current->next;
     }
     return 0;
 }
 
 // Eliminar un valor en (x, y)
-void SparseMatrix::remove(int xPos, int yPos) {
-    if (!start) return;
+void SparseMatrix::remove(int fila, int col) {
+    if (fila>=filas.size()) return;
 
-    Nodo* current = start;
+    Nodo* current = filas[fila];
     Nodo* prev = nullptr;
 
-    while (current != nullptr) {
-        if (current->x == xPos && current->y == yPos) {
-            if (current == start){
-                start = current->next;
+    while (current) {
+        if (current->col == col) {
+            if (prev){
+                prev->next=current->next;
             }else{
-                prev->next = current->next;
+                filas[fila]=current->next;
             }    
             delete current;
             return;
@@ -76,51 +88,51 @@ void SparseMatrix::remove(int xPos, int yPos) {
 
 // Imprimir valores almacenados
 void SparseMatrix::printStoredValues() {
-    Nodo* current = start;
-    if (!current) {
-        cout << "(Matriz vacía)" << endl;
-        return;
-    }
-    while (current != nullptr) {
-        cout << "(" << current->x << ", " << current->y << ") --> " << current->value << endl;
-        current = current->next;
+    for(int i=0; i<filas.size(); ++i){
+        Nodo* current = filas[i];
+        while (current != nullptr) {
+            cout << "(" << i << ", " << current->col << ") -> " << current->valor << endl;
+            current = current->next;
+        }
     }
 }
-
 // Calcular densidad de la matriz
 int SparseMatrix::density() {
-    if (!start) return 0;
+    if (filas.empty() || numCols==0) return 0.0;
 
-    int count = 0, maxX = 0, maxY = 0;
+    int contZero=0;
 
-    Nodo* current = start;
-    while (current != nullptr) {
-        count++;
-        if (current->x > maxX) maxX = current->x;
-        if (current->y > maxY) maxY = current->y;
-        current = current->next;
+    for(auto head : filas){
+        Nodo* current = head;
+        while (current != nullptr) {
+            contZero++;
+            current = current->next;
+        }
     }
-    int total = (maxX + 1) * (maxY + 1);
-    double dens = (double)count / total *100.0;
-    return (int) dens;
+    int total = (filas.size()) * (numCols);
+    return (double) contZero / total *100.0;
+    
 }
 
 // Multiplicar dos matrices poco pobladas
 SparseMatrix* SparseMatrix::multiply(SparseMatrix* second) {
     SparseMatrix* result = new SparseMatrix();
-    if (!start || !second->start) return result;
-
-    Nodo* aux = start;
-    while (aux != nullptr) {
-        Nodo* aux2 = second->start;
-        while (aux2 != nullptr) {
-            if (aux->y == aux2->x) {
-                int existe = result->get(aux->x, aux2->y);
-                result->add(existe + aux->value * aux2->value, aux->x, aux2->y);
+    if (filas.empty() || second->filas.empty()) return result;
+    for(int i=0;i,filas.size();++i){
+        Nodo* aux = filas[i];
+        while (aux) {
+            int k = aux->col;
+            if(k<second->filas.size()){
+                Nodo* aux2 = second->filas[k];
+                while (aux2) {
+                    int val = result->get(i,aux2->col);
+                    result->add(val +aux->valor * aux2->valor,i,aux2->col);
+                    aux2 = aux2->next;
+                }
             }
-            aux2 = aux2->next;
+            aux = aux->next;
         }
-        aux = aux->next;
+
     }
     return result;
 }

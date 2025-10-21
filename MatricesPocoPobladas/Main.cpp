@@ -7,7 +7,6 @@ using namespace std;
 //"C:\Users\User\Documents\GitHub\Taller2\MatricesPocoPobladas"
 
 void llenarMatrizRand(SparseMatrix &matrix, int Nelementos, int maxcoord){
-    srand(time(0));
     int cont=0;
     while(cont< Nelementos){
         int fila = rand() % maxcoord;

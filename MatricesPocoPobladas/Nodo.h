@@ -1,13 +1,11 @@
 #pragma once
 struct Nodo {
-    int x;
-    int y;
-    int value;
+    int col;
+    int valor;
     Nodo* next;
-    Nodo(int posX, int posY, int val) {
-        x = posX;
-        y = posY;
-        value = val;
+    Nodo(int col, int val) {
+        col = col;
+        valor = val;
         next = nullptr;
     }
 };
