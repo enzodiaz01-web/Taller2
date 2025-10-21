@@ -9,10 +9,10 @@ SparseMatrix::SparseMatrix() {
 
 // Destructor
 SparseMatrix::~SparseMatrix() {
-    Nodo* current = start;
-    while (current != nullptr) {
-        Nodo* temp = current;
-        current = current->next;
+    Nodo* aux = start;
+    while (aux != nullptr) {
+        Nodo* temp = aux;
+        aux = aux->next;
         delete temp;
     }
 
@@ -21,7 +21,7 @@ SparseMatrix::~SparseMatrix() {
 void SparseMatrix::add(int value, int xPos, int yPos) {
     if (value == 0) return;
 
-    if (start == nullptr) {
+    if (!start) {
         start = new Nodo(xPos, yPos, value);
         return;
     }
@@ -54,17 +54,18 @@ int SparseMatrix::get(int xPos, int yPos) {
 
 // Eliminar un valor en (x, y)
 void SparseMatrix::remove(int xPos, int yPos) {
-    if (start == nullptr) return;
+    if (!start) return;
 
     Nodo* current = start;
     Nodo* prev = nullptr;
 
     while (current != nullptr) {
         if (current->x == xPos && current->y == yPos) {
-            if (current == start)
+            if (current == start){
                 start = current->next;
-            else
+            }else{
                 prev->next = current->next;
+            }    
             delete current;
             return;
         }
@@ -87,8 +88,8 @@ void SparseMatrix::printStoredValues() {
 }
 
 // Calcular densidad de la matriz
-double SparseMatrix::density() {
-    if (start == nullptr) return 0.0;
+int SparseMatrix::density() {
+    if (!start) return 0;
 
     int count = 0, maxX = 0, maxY = 0;
 
@@ -100,28 +101,26 @@ double SparseMatrix::density() {
         current = current->next;
     }
     int total = (maxX + 1) * (maxY + 1);
-    if (total == 0) return 0.0;
-    double dens = (double)count / total;
-    return (double) count/total;
+    double dens = (double)count / total *100.0;
+    return (int) dens;
 }
 
 // Multiplicar dos matrices poco pobladas
 SparseMatrix* SparseMatrix::multiply(SparseMatrix* second) {
     SparseMatrix* result = new SparseMatrix();
-    if (start == nullptr || second->start == nullptr)
-        return result;
+    if (!start || !second->start) return result;
 
-    Nodo* a = start;
-    while (a != nullptr) {
-        Nodo* b = second->start;
-        while (b != nullptr) {
-            if (a->y == b->x) {
-                int prev = result->get(a->x, b->y);
-                result->add(prev + a->value * b->value, a->x, b->y);
+    Nodo* aux = start;
+    while (aux != nullptr) {
+        Nodo* aux2 = second->start;
+        while (aux2 != nullptr) {
+            if (aux->y == aux2->x) {
+                int existe = result->get(aux->x, aux2->y);
+                result->add(existe + aux->value * aux2->value, aux->x, aux2->y);
             }
-            b = b->next;
+            aux2 = aux2->next;
         }
-        a = a->next;
+        aux = aux->next;
     }
     return result;
 }
