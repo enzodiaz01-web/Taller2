@@ -68,36 +68,42 @@ void Rendimiento() {
     double densidades[] = {0.3, 0.75};
     int repeticiones =10;
 
-    cout << "      PRUEBAS DE RENDIMIENTO     "<<endl;
 
-    cout<<"============ PRUEBAS DE INSERCION ==============";
+    cout << "\n============================================\n";
+    cout << "         PRUEBAS DE INSERCION\n";
+    cout << "============================================\n";
     for (double densidad : densidades) {
-      cout<< "Densidad: "<< densidad * 100<<"%"<<endl;
-      for (int n : dataSets){
-        int maxCoord = static_cast<int>(n/densidad);
-        double promedio = TiempoInsercion(n,maxCoord,repeticiones);
-        cout << "Numero de elementos: "<< n <<" | Tiempo promedio de insercion: "<< promedio << " s" << endl;
+        cout<< "Densidad: "<< densidad * 100<<"%"<<endl;
+        cout << "----------------------------------------\n";
+        for (int n : dataSets){
+            int maxCoord = static_cast<int>(n/densidad);
+            double promedio = TiempoInsercion(n,maxCoord,repeticiones);
+            cout << "Numero de elementos: "<< n <<" | Tiempo promedio de insercion: "<< promedio << " s" << endl;
       }
     }
-    cout<<"=========== PRUEBAS DE OBTENCION =================";    
+    cout << "\n============================================\n";
+    cout << "         PRUEBAS DE OBTENCION (GET)\n";
+    cout << "============================================\n";
     for (double densidad : densidades) {
-        cout << "\nDensidad: " << densidad * 100 << "%"<<endl;
+        cout << "Densidad: " << densidad * 100 << "%"<<endl;
+        cout << "----------------------------------------\n";
         for (int n : dataSets) {
             int maxCoord = static_cast<int>(n / densidad);
             double promedio = TiempoObtener(n, maxCoord, repeticiones);
             
-            cout << "Numero de elementos: " << n <<" | Tiempo: " << fixed << promedio <<" s"<<endl;
+            cout << "Numero de elementos: " << n <<" | Tiempo: " << promedio <<" s"<<endl;
         }
     }
-    
-
-    cout<<"============== PRUEBAS DE MULTIPLICACION ===============";
+    cout << "\n============================================\n";
+    cout << "         PRUEBAS DE MULTIPLICACION\n";
+    cout << "============================================\n";
     for (double densidad : densidades) {
-        cout << "\nDensidad: " << densidad * 100 << "%\n";
+        cout << "Densidad: " << densidad * 100 << "%"<<endl;
+        cout << "----------------------------------------\n";
         for (int n : dataSets) {
             int maxCoord = static_cast<int>(n / densidad);
             double promedio = TiempoMultiplicar(n, maxCoord, repeticiones);
-            cout << "Numero de elementos: " << n <<" | Tiempo: " << fixed <<  promedio << " s"<<endl;
+            cout << "Numero de elementos: " << n <<" | Tiempo: " <<  promedio << " s"<<endl;
         }
     }
 }
