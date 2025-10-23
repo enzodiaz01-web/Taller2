@@ -31,6 +31,38 @@ double TiempoInsercion(int n, double densidad, int repeticiones){
     }
     return contTime/repeticiones;
 }
+double TiempoObtener(int n, int maxCoord, int repeticiones){
+    double contTime = 0.0;  
+    for(int i = 0; i < repeticiones; ++i){
+        SparseMatrix matriz;
+        llenarMatrizRand(matriz, n, maxCoord);
+        clock_t inicio = clock();
+        for(int j = 0; j < n; ++j){
+            int fila = rand() % maxCoord;
+            int col = rand() % maxCoord;
+            matriz.get(fila, col);
+        }
+        clock_t fin = clock();
+        double tiempo = double(fin - inicio) / CLOCKS_PER_SEC;
+        contTime += tiempo;
+    }
+    return contTime / repeticiones;
+}
+double TiempoMultiplicar(int n, int maxCoord, int repeticiones){
+    double contTime = 0.0;  
+    for(int i = 0; i < repeticiones; ++i){
+        SparseMatrix matriz1, matriz2;
+        llenarMatrizRand(matriz1, n, maxCoord);
+        llenarMatrizRand(matriz2, n, maxCoord);
+        clock_t inicio = clock();
+        SparseMatrix* resultado = matriz1.multiply(&matriz2);
+        clock_t fin = clock();
+        delete resultado;
+        double tiempo = double(fin - inicio) / CLOCKS_PER_SEC;
+        contTime += tiempo;
+    }
+    return contTime / repeticiones;
+}
 void Rendimiento() {
     int dataSets[] = {50, 250, 500, 1000, 5000};
     double densidades[] = {0.3, 0.75};
@@ -38,13 +70,35 @@ void Rendimiento() {
 
     cout << "      PRUEBAS DE RENDIMIENTO     "<<endl;
 
+    cout<<"============ PRUEBAS DE INSERCION ==============";
     for (double densidad : densidades) {
       cout<< "Densidad: "<< densidad * 100<<"%"<<endl;
       for (int n : dataSets){
         int maxCoord = static_cast<int>(n/densidad);
         double promedio = TiempoInsercion(n,maxCoord,repeticiones);
-        cout << "Numero de elementos: "<< n <<" Tiempo promedio de insercion: "<< promedio << " segundos" << endl;
+        cout << "Numero de elementos: "<< n <<" | Tiempo promedio de insercion: "<< promedio << " s" << endl;
       }
+    }
+    cout<<"=========== PRUEBAS DE OBTENCION =================";    
+    for (double densidad : densidades) {
+        cout << "\nDensidad: " << densidad * 100 << "%"<<endl;
+        for (int n : dataSets) {
+            int maxCoord = static_cast<int>(n / densidad);
+            double promedio = TiempoObtener(n, maxCoord, repeticiones);
+            
+            cout << "Numero de elementos: " << n <<" | Tiempo: " << fixed << promedio <<" s"<<endl;
+        }
+    }
+    
+
+    cout<<"============== PRUEBAS DE MULTIPLICACION ===============";
+    for (double densidad : densidades) {
+        cout << "\nDensidad: " << densidad * 100 << "%\n";
+        for (int n : dataSets) {
+            int maxCoord = static_cast<int>(n / densidad);
+            double promedio = TiempoMultiplicar(n, maxCoord, repeticiones);
+            cout << "Numero de elementos: " << n <<" | Tiempo: " << fixed <<  promedio << " s"<<endl;
+        }
     }
 }
 void menu(){

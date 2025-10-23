@@ -21,13 +21,11 @@ SparseMatrix::~SparseMatrix() {
 void SparseMatrix::add(int valor, int fila, int col) {
     if (valor == 0) return;
 
-    if (fila>=filas.size()) {
+    if (fila>=filas.size()) 
         filas.resize(fila+1,nullptr);
-    }
-    if(col>=numCols){
+    
+    if(col>=numCols)
         numCols=col+1;
-    }
-
 
     Nodo* &head=filas[fila];
     Nodo* current = head;
@@ -44,12 +42,8 @@ void SparseMatrix::add(int valor, int fila, int col) {
     }else{
         Nodo* nuevo = new Nodo(col,valor);
         nuevo->next = current;
-        if(prev){
-            prev->next=nuevo;
-
-        }else{
-            head = nuevo;
-        }
+        if(prev) prev->next=nuevo;
+        else head = nuevo;
     }
 }
 
@@ -97,20 +91,20 @@ void SparseMatrix::printStoredValues() {
     }
 }
 // Calcular densidad de la matriz
-int SparseMatrix::density() {
+double SparseMatrix::density() {
     if (filas.empty() || numCols==0) return 0.0;
 
-    int contZero=0;
+    int NoZero=0;
 
     for(auto head : filas){
         Nodo* current = head;
         while (current != nullptr) {
-            contZero++;
+            NoZero++;
             current = current->next;
         }
     }
     int total = (filas.size()) * (numCols);
-    return (double) contZero / total *100.0;
+    return (double) NoZero / total *100.0;
     
 }
 
@@ -118,7 +112,7 @@ int SparseMatrix::density() {
 SparseMatrix* SparseMatrix::multiply(SparseMatrix* second) {
     SparseMatrix* result = new SparseMatrix();
     if (filas.empty() || second->filas.empty()) return result;
-    for(int i=0;i,filas.size();++i){
+    for(int i=0;i<filas.size();++i){
         Nodo* aux = filas[i];
         while (aux) {
             int k = aux->col;
