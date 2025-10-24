@@ -114,17 +114,17 @@ void menu(){
 
     int opcion = -1;
     while (opcion != 0) {
-        cout << " MENU MATRICES DISPERSAS ";
-        cout << "1. Agregar valor a matriz 1";
-        cout << "2. Obtener valor de matriz 1";
-        cout << "3. Eliminar valor de matriz 1";
+        cout << " MENU MATRICES DISPERSAS \n";
+        cout << "1. Agregar valor a matriz 1\n";
+        cout << "2. Obtener valor de matriz 1\n";
+        cout << "3. Eliminar valor de matriz 1\n";
         cout << "4. Imprimir matriz 1\n";
-        cout << "5. Imprimir densidad de matriz 1";
-        cout << "6. Llenar matriz 1 aleatoriamente";
-        cout << "7. Agregar valor a matriz 2";
+        cout << "5. Imprimir densidad de matriz 1\n";
+        cout << "6. Llenar matriz 1 aleatoriamente\n";
+        cout << "7. Agregar valor a matriz 2\n";
         cout << "8. Imprimir matriz 2\n";
-        cout << "9. Multiplicar matriz1 x matriz2";
-        cout << "0. Salir";
+        cout << "9. Multiplicar matriz1 x matriz2\n";
+        cout << "0. Salir\n";
         cout << "Seleccione opcion: ";
         cin >> opcion;
 
@@ -135,6 +135,7 @@ void menu(){
                 cout << "Columna: "; cin >> col;
                 cout << "Valor: "; cin >> val;
                 matriz1.add(val, fila, col);
+                cout<< "valor agregado correctamente\n";
                 break;
             }
             case 2: {
@@ -162,8 +163,8 @@ void menu(){
                 break;
             case 6: {
                 int n, maxCoord;
-                cout << "Número de elementos: "; cin >> n;
-                cout << "Máximo índice (filas/columnas): "; cin >> maxCoord;
+                cout << "Numero de elementos: "; cin >> n;
+                cout << "Maximo indice (filas/columnas): "; cin >> maxCoord;
                 llenarMatrizRand(matriz1, n, maxCoord);
                 cout << "Matriz 1 llenada aleatoriamente.\n";
                 break;
@@ -181,6 +182,13 @@ void menu(){
                 matriz2.printStoredValues();
                 break;
             case 9:
+                int n, maxCoord;
+                cout << "Numero de elementos: "; cin >> n;
+                cout << "Maximo indice (filas/columnas): "; cin >> maxCoord;
+                llenarMatrizRand(matriz2, n, maxCoord);
+                cout << "Matriz 2 llenada aleatoriamente.\n";
+                break;
+            case 10:
                 if (resultado) delete resultado;
                 resultado = matriz1.multiply(&matriz2);
                 cout << "Resultado matriz1 x matriz2:\n";
